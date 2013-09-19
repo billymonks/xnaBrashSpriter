@@ -24,10 +24,8 @@ namespace BrashMonkeyContentPipelineExtension {
             return BuildSpriteSheet(p_input, p_context);
         }
 
-        private bool GetAttributeInt32(XElement p_element, String p_name, out Int32 p_out, Int32 p_default = 0)
-        {
-            if (p_element.Attribute(p_name) != null)
-            {
+        private bool GetAttributeInt32(XElement p_element, String p_name, out Int32 p_out, Int32 p_default = 0) {
+            if (p_element.Attribute(p_name) != null) {
                 return Int32.TryParse(p_element.Attribute(p_name).Value, out p_out);
             }
 
@@ -58,14 +56,11 @@ namespace BrashMonkeyContentPipelineExtension {
                 foreach (XElement l_file in l_folder.Descendants("file")) {
                     ExternalReference<TextureContent> l_textureReference = new ExternalReference<TextureContent>(p_fileName + @"\" + l_file.Attribute("name").Value);
                     
-                    if (!File.Exists(l_textureReference.Filename))
-                    {
+                    if (!File.Exists(l_textureReference.Filename)) {
                         int l_fileId;
                         GetAttributeInt32(l_file, "id", out l_fileId);
                         l_removedTextures.Add(l_fileId);
-                    }
-                    else
-                    {
+                    } else {
                         TextureContent texture = p_context.BuildAndLoadAsset<TextureContent, TextureContent>(l_textureReference, "TextureProcessor");
                         l_sourceSprites.Add(texture.Faces[0][0]);
                     }
@@ -76,9 +71,8 @@ namespace BrashMonkeyContentPipelineExtension {
                 l_outputTexture.Mipmaps.Add(l_packedSprites);
 
                 // Add dummy rectangles for removed textures
-                foreach (var l_fileId in l_removedTextures)
-                {
-                    l_outputRectangles.Insert(l_fileId, new Rectangle(-1,-1,0,0));
+                foreach (var l_fileId in l_removedTextures) {                    
+                    l_outputRectangles.Insert(l_fileId, new Rectangle(-1, -1, 0, 0));
                 }
 
                 //  Add the data to the return type
