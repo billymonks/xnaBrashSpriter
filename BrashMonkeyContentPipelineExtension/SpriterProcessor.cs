@@ -43,23 +43,25 @@ namespace BrashMonkeyContentPipelineExtension {
             l_return.Textures = new List<Texture2DContent>();
             l_return.XML = p_input;
 
-            String p_fileName = (new List<XElement>(l_return.XML.Root.Descendants("File")))[0].Attribute("path").Value;
-
-            List<int> l_removedTextures = new List<int>();
+            String l_fileName = (new List<XElement>(l_return.XML.Root.Descendants("File")))[0].Attribute("path").Value;
+            //List<String> l_failedFiles = new List<String>();
 
             foreach (XElement l_folder in l_return.XML.Root.Descendants("folder")) {
                 List<BitmapContent> l_sourceSprites = new List<BitmapContent>();
 
                 Texture2DContent l_outputTexture = new Texture2DContent();
                 List<Rectangle> l_outputRectangles = new List<Rectangle>();
+                List<int> l_removedTextures = new List<int>();
 
                 foreach (XElement l_file in l_folder.Descendants("file")) {
-                    ExternalReference<TextureContent> l_textureReference = new ExternalReference<TextureContent>(p_fileName + @"\" + l_file.Attribute("name").Value);
+                    ExternalReference<TextureContent> l_textureReference = new ExternalReference<TextureContent>(l_fileName + @"\" + l_file.Attribute("name").Value);
                     
                     if (!File.Exists(l_textureReference.Filename)) {
                         int l_fileId;
                         GetAttributeInt32(l_file, "id", out l_fileId);
                         l_removedTextures.Add(l_fileId);
+
+                        //l_failedFiles.Add(l_textureReference.Filename);
                     } else {
                         TextureContent texture = p_context.BuildAndLoadAsset<TextureContent, TextureContent>(l_textureReference, "TextureProcessor");
                         l_sourceSprites.Add(texture.Faces[0][0]);
@@ -72,10 +74,10 @@ namespace BrashMonkeyContentPipelineExtension {
 
                 // Add dummy rectangles for removed textures
                 foreach (var l_fileId in l_removedTextures) {
-                    if (l_fileId < l_outputRectangles.Count) {
-                        l_outputRectangles.Insert(l_fileId, new Rectangle(-1, -1, 0, 0));
+                    if (l_fileId <= l_outputRectangles.Count) {
+                        l_outputRectangles.Insert(l_fileId, Rectangle.Empty);
                     } else {
-                        l_outputRectangles.Add(new Rectangle(-1, -1, 0, 0));
+                        l_outputRectangles.Add(Rectangle.Empty);
                     }
                 }
 
@@ -83,6 +85,15 @@ namespace BrashMonkeyContentPipelineExtension {
                 l_return.Rectangles.Add(l_outputRectangles);
                 l_return.Textures.Add(l_outputTexture);
             }
+
+            //if (l_failedFiles.Count > 0) {
+            //    String l_error = "";
+            //    foreach (String l_fail in l_failedFiles) {
+            //        l_error += l_fail + ", ";
+            //    }
+
+            //    throw new Exception("Files are missing", new Exception(l_error));
+            //}
 
             return l_return;
         }

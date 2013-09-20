@@ -28,8 +28,9 @@ namespace BrashMonkeyContentPipelineExtension {
         /// recording where each one was stored.
         /// </summary>
         public static BitmapContent PackSprites(IList<BitmapContent> p_sourceSprites, ICollection<Rectangle> p_outputSprites, ContentProcessorContext p_context) {
-            if (p_sourceSprites.Count == 0)
+            if (p_sourceSprites.Count == 0) {
                 throw new InvalidContentException("There are no sprites to arrange");
+            }
 
             // Build up a list of all the sprites needing to be arranged.
             List<ArrangedSprite> l_sprites = new List<ArrangedSprite>();
