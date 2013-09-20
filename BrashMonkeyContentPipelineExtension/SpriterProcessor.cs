@@ -71,8 +71,12 @@ namespace BrashMonkeyContentPipelineExtension {
                 l_outputTexture.Mipmaps.Add(l_packedSprites);
 
                 // Add dummy rectangles for removed textures
-                foreach (var l_fileId in l_removedTextures) {                    
-                    l_outputRectangles.Insert(l_fileId, new Rectangle(-1, -1, 0, 0));
+                foreach (var l_fileId in l_removedTextures) {
+                    if (l_fileId < l_outputRectangles.Count) {
+                        l_outputRectangles.Insert(l_fileId, new Rectangle(-1, -1, 0, 0));
+                    } else {
+                        l_outputRectangles.Add(new Rectangle(-1, -1, 0, 0));
+                    }
                 }
 
                 //  Add the data to the return type

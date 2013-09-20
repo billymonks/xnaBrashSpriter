@@ -60,7 +60,7 @@ namespace BrashMonkeySpriterGameTest {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            m_character = Content.Load<CharacterModel>(@".\graphics\models\player").CreateAnimator("player");
+            m_character = Content.Load<CharacterModel>(@".\graphics\models\player").CreateAnimator("Player");
 
             // TODO: use this.Content to load your game content here
         }

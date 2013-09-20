@@ -29,8 +29,8 @@ namespace BrashMonkeySpriter {
             Rectangles = new List<List<Rectangle>>();
         }
 
-        public Entity this[string name] {
-            get { return this.FirstOrDefault(x => x.Name == name); }
+        public Entity this[string p_name] {
+            get { return this.FirstOrDefault(x => x.Name == p_name); }
         }
 
         public CharaterAnimator CreateAnimator(String p_entity) {
@@ -123,7 +123,7 @@ namespace BrashMonkeySpriter {
         protected List<Texture2D> m_tx;
         protected List<List<Rectangle>> m_rect;
 
-        protected Dictionary<int, AnimationTransform> m_boneTransforms;
+        protected Dictionary<int, AnimationTransform> m_boneTransforms = new Dictionary<int, AnimationTransform>();
 
         public delegate void AnimationEndedHandler();
         public event AnimationEndedHandler AnimationEnded;
@@ -132,8 +132,6 @@ namespace BrashMonkeySpriter {
             m_entity = p_model[p_entity];
             m_tx = p_model.Textures;
             m_rect = p_model.Rectangles;
-
-            m_boneTransforms = new Dictionary<int, AnimationTransform>();
 
             ChangeAnimation(0);
         }
@@ -156,24 +154,17 @@ namespace BrashMonkeySpriter {
             // I guess the Spriter editor sometimes messes things up
             // I'm not sure how to reproduce this problem but better safe than sorry? For the reference XSpriter does something similar
 
-            int l_keyCur = l_timeline.KeyAtOrBefore(m_elapsedTime);
-
-            int l_thisTime = m_elapsedTime - l_timeline.Keys[l_keyCur].Time;
-            int l_keyNext;
-            int l_nextTime;
+            int l_keyCur = l_timeline.KeyAtOrBefore(m_elapsedTime), l_keyNext = 0;
+            int l_thisTime = m_elapsedTime - l_timeline.Keys[l_keyCur].Time, l_nextTime = 0;
             // Find the next frame.
             if ((l_keyCur + 1) < l_timeline.Keys.Count) {
                 l_keyNext = l_keyCur + 1;
                 l_nextTime = l_timeline.Keys[l_keyNext].Time;
-            }
-            else if (m_current.Looping)
-            {
+            } else if (m_current.Looping) {
                 // Assume that there is a frame at time=0
                 l_keyNext = 0;
                 l_nextTime = m_current.Length;
-            }
-            else
-            {
+            } else {
                 l_keyNext = l_keyCur;
                 l_nextTime = m_current.Length;
             }
@@ -223,8 +214,7 @@ namespace BrashMonkeySpriter {
         }
 
         protected AnimationTransform ApplyBoneTransforms(MainlineKey p_main, Reference p_reference) {
-            if (p_reference.BoneId >= 0 && m_boneTransforms.ContainsKey(p_reference.BoneId))
-            {
+            if ((p_reference.BoneId >= 0) && m_boneTransforms.ContainsKey(p_reference.BoneId)) {
                 return m_boneTransforms[p_reference.BoneId];
             }
 
@@ -233,15 +223,16 @@ namespace BrashMonkeySpriter {
             AnimationTransform l_baseTransform;
             if((p_reference.Parent != -1)){
                 l_baseTransform = ApplyBoneTransforms(p_main, p_main.Bones[p_reference.Parent]);
-            }
-            else{
+            } else {
                 //Apply global transforms to objects without parents (location is added later)
                 l_baseTransform = new AnimationTransform(Vector2.Zero, Rotation, Vector2.Zero, new Vector2(Math.Abs(Scale)));
             }
             l_transform = ApplyTransform(l_transform, l_baseTransform);
 
-            if (p_reference.BoneId >= 0)
+            if (p_reference.BoneId >= 0) {
                 m_boneTransforms.Add(p_reference.BoneId, l_transform);
+            }
+
             return l_transform;
         }
 
