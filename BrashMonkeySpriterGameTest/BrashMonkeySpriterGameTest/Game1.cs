@@ -61,6 +61,7 @@ namespace BrashMonkeySpriterGameTest {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             m_character = Content.Load<CharacterModel>(@".\graphics\models\player").CreateAnimator("Player");
+            m_character.ChangeAnimation("idle");
 
             // TODO: use this.Content to load your game content here
         }
@@ -85,7 +86,6 @@ namespace BrashMonkeySpriterGameTest {
             }
 
             // TODO: Add your update logic here
-//            m_character.ChangeAnimation("Idle_000");
             m_character.Location = new Vector2(320, 380);
             m_character.Scale = 0.75f;
             m_character.Rotation = 0.0f;

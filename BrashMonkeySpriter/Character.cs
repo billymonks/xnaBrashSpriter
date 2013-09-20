@@ -161,7 +161,7 @@ namespace BrashMonkeySpriter {
                 l_keyNext = l_keyCur + 1;
                 l_nextTime = l_timeline.Keys[l_keyNext].Time;
             } else if (m_current.Looping) {
-                // Assume that there is a frame at time=0
+                // Assume that there is a frame at time = 0
                 l_keyNext = 0;
                 l_nextTime = m_current.Length;
             } else {
@@ -172,24 +172,31 @@ namespace BrashMonkeySpriter {
             //  Figure out where we are in the timeline...
             l_nextTime = l_nextTime - l_timeline.Keys[l_keyCur].Time;
 
-            TimelineKey l_now = l_timeline.Keys[l_keyCur];
-            TimelineKey l_next = l_timeline.Keys[l_keyNext];
+            TimelineKey l_now = l_timeline.Keys[l_keyCur], l_next = l_timeline.Keys[l_keyNext];
+            float l_timeRatio = (float)l_thisTime / (float)l_nextTime;
 
             /// Tween EVERYTHING... Gonna have to add an option for it not to...
             /// Rotations are handled differently depending on which way they're supposed to spin
             AnimationTransform l_render = new AnimationTransform();
-            if ((l_now.Spin == SpinDirection.Clockwise) && ((l_next.Rotation - l_now.Rotation) < 0.0f)) {
-                l_render.Rotation = MathHelper.Lerp(l_now.Rotation, (l_next.Rotation + MathHelper.TwoPi), (float)l_thisTime / (float)l_nextTime);
-            } else if ((l_now.Spin == SpinDirection.CounterClockwise) && ((l_next.Rotation - l_now.Rotation) > 0.0f)) {
-                l_render.Rotation = MathHelper.Lerp(l_now.Rotation, (l_next.Rotation - MathHelper.TwoPi), (float)l_thisTime / (float)l_nextTime);
-            } else {
-                l_render.Rotation = MathHelper.Lerp(l_now.Rotation, l_next.Rotation, (float)l_thisTime / (float)l_nextTime);
+
+            float l_angleA = l_now.Rotation, l_angleB = l_next.Rotation;
+            if (l_now.Spin == SpinDirection.None) {
+                l_angleA = l_angleB = l_now.Rotation;
+            } else if (l_now.Spin == SpinDirection.Clockwise) {
+                if ((l_angleB - l_angleA) < 0.0f) {
+                    l_angleB += MathHelper.TwoPi;
+                }
+            } else if (l_now.Spin == SpinDirection.CounterClockwise) {
+                if ((l_angleB - l_angleA) > 0.0f) {
+                    l_angleB -= MathHelper.TwoPi;
+                }
             }
 
-            l_render.Scale = Vector2.Lerp(l_now.Scale, l_next.Scale, (float)l_thisTime / (float)l_nextTime);
-            l_render.Location = Vector2.Lerp(l_now.Location, l_next.Location, (float)l_thisTime / (float)l_nextTime);
-            l_render.Pivot = Vector2.Lerp(l_now.Pivot, l_next.Pivot, (float)l_thisTime / (float)l_nextTime);
-            l_render.Alpha = MathHelper.Lerp(l_now.Alpha, l_next.Alpha, (float)l_thisTime / (float)l_nextTime);
+            l_render.Rotation = MathHelper.Lerp(l_angleA, l_angleB, l_timeRatio);           
+            l_render.Scale = Vector2.Lerp(l_now.Scale, l_next.Scale, l_timeRatio);
+            l_render.Location = Vector2.Lerp(l_now.Location, l_next.Location, l_timeRatio);
+            l_render.Pivot = Vector2.Lerp(l_now.Pivot, l_next.Pivot, l_timeRatio);
+            l_render.Alpha = MathHelper.Lerp(l_now.Alpha, l_next.Alpha, l_timeRatio);
 
             // So, how far are we between frames?
             return l_render;
@@ -219,7 +226,6 @@ namespace BrashMonkeySpriter {
             }
 
             AnimationTransform l_transform = GetFrameTransition(p_reference);
-
             AnimationTransform l_baseTransform;
             if((p_reference.Parent != -1)){
                 l_baseTransform = ApplyBoneTransforms(p_main, p_main.Bones[p_reference.Parent]);
@@ -259,14 +265,12 @@ namespace BrashMonkeySpriter {
             }
 
             Vector2 l_flip = new Vector2(m_flipX ? -1.0f : 1.0f, m_flipY ? -1.0f : 1.0f);
-
             MainlineKey l_mainline = m_current.MainLine[l_frame];
             
             for (int l_i = 0; l_i < l_mainline.Body.Count; l_i++) {
                 TimelineKey l_key = m_current.TimeLines[l_mainline.Body[l_i].Timeline].Keys[l_mainline.Body[l_i].Key];
                 // check if file for this object is missing, and if so skip calculating transforms
-                if (m_rect[l_key.Folder][l_key.File].Width == 0)
-                {
+                if (m_rect[l_key.Folder][l_key.File].Width == 0) {
                     continue;
                 }
 

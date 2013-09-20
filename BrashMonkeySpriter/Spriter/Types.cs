@@ -9,6 +9,7 @@
 
 namespace BrashMonkeySpriter.Spriter {
     public enum SpinDirection : int {
+        None = 0,
         Clockwise = -1,
         CounterClockwise = 1
     }

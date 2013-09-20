@@ -23,21 +23,21 @@ namespace BrashMonkeySpriter.Spriter {
     public class Timeline {
         public String Name;
         public List<TimelineKey> Keys;
-        public int KeyAtOrBefore(int p_elapsedTime)
-        {
+        
+        public int KeyAtOrBefore(int p_elapsedTime) {
             // Binary search correct key
-            int lo = 0, hi = Keys.Count - 1;
-            while ( hi - lo > 1)
-            {
-                int m = (hi + lo) / 2;
-                if (Keys[m].Time > p_elapsedTime) hi = m - 1;
-                else lo = m;
+            int l_lo = 0, l_hi = Keys.Count - 1;
+            while ( l_hi - l_lo > 1) {
+                int m = (l_hi + l_lo) / 2;
+                if (Keys[m].Time > p_elapsedTime) l_hi = m - 1;
+                else l_lo = m;
             }
-            if (Keys[hi].Time < p_elapsedTime)
-                return hi;
-            
-            return lo;
-            
+
+            if (Keys[l_hi].Time < p_elapsedTime) {
+                return l_hi;
+            }
+
+            return l_lo;            
         }
     }
 

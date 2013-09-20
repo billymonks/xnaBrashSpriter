@@ -145,7 +145,15 @@ namespace BrashMonkeySpriter.Content {
                             TimelineKey l_key = new TimelineKey();
 
                             l_key.Time = p_input.ReadInt32();//time
-                            l_key.Spin = p_input.ReadInt32() >= 0 ? SpinDirection.CounterClockwise : SpinDirection.Clockwise;//spin
+
+                            int l_spin = p_input.ReadInt32();//spin
+                            if (l_spin == 0) {
+                                l_key.Spin = SpinDirection.None;
+                            } else if (l_spin == 1) {
+                                l_key.Spin = SpinDirection.CounterClockwise;
+                            } else if (l_spin == -1) {
+                                l_key.Spin = SpinDirection.Clockwise;
+                            }
 
                             l_key.Type = (TimelineType)p_input.ReadInt32();//type
 
