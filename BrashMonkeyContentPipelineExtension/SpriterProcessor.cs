@@ -74,11 +74,11 @@ namespace BrashMonkeyContentPipelineExtension {
 
                 // Add dummy rectangles for removed textures
                 foreach (var l_fileId in l_removedTextures) {
-                    if (l_fileId <= l_outputRectangles.Count) {
+                    //if (l_fileId <= l_outputRectangles.Count) {
                         l_outputRectangles.Insert(l_fileId, Rectangle.Empty);
-                    } else {
-                        l_outputRectangles.Add(Rectangle.Empty);
-                    }
+                    //} else {
+//                        l_outputRectangles.Add(Rectangle.Empty);
+                    //}
                 }
 
                 //  Add the data to the return type
