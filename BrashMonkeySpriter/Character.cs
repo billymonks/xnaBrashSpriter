@@ -123,7 +123,7 @@ namespace BrashMonkeySpriter {
         protected List<Texture2D> m_tx;
         protected List<List<Rectangle>> m_rect;
 
-        protected Dictionary<int, AnimationTransform> m_boneTransforms = new Dictionary<int, AnimationTransform>();
+        protected Dictionary<int, AnimationTransform> m_boneTransforms;
 
         public delegate void AnimationEndedHandler();
         public event AnimationEndedHandler AnimationEnded;
@@ -139,11 +139,13 @@ namespace BrashMonkeySpriter {
         public void ChangeAnimation(String p_name) {
             m_current = m_entity[p_name];
             m_renderList = new List<RenderMatrix>(m_current.MainLine[0].Body.Count);
+            m_boneTransforms = new Dictionary<int, AnimationTransform>(m_current.MainLine[0].Body.Count);
         }
 
         public void ChangeAnimation(int p_index) {
             m_current = m_entity[p_index];
             m_renderList = new List<RenderMatrix>(m_current.MainLine[0].Body.Count);
+            m_boneTransforms = new Dictionary<int, AnimationTransform>(m_current.MainLine[0].Body.Count);
         }
 
         protected AnimationTransform GetFrameTransition(Reference p_ref) {
@@ -173,26 +175,32 @@ namespace BrashMonkeySpriter {
             l_nextTime = l_nextTime - l_timeline.Keys[l_keyCur].Time;
 
             TimelineKey l_now = l_timeline.Keys[l_keyCur], l_next = l_timeline.Keys[l_keyNext];
-            float l_timeRatio = (float)l_thisTime / (float)l_nextTime;
+            float l_timeRatio = MathHelper.Clamp((float)l_thisTime / (float)l_nextTime, 0.0f, 1.0f);
 
             /// Tween EVERYTHING... Gonna have to add an option for it not to...
             /// Rotations are handled differently depending on which way they're supposed to spin
             AnimationTransform l_render = new AnimationTransform();
 
-            float l_angleA = l_now.Rotation, l_angleB = l_next.Rotation;
             if (l_now.Spin == SpinDirection.None) {
-                l_angleA = l_angleB = l_now.Rotation;
+                l_render.Rotation = l_now.Rotation;
             } else if (l_now.Spin == SpinDirection.Clockwise) {
+                float l_angleA = l_now.Rotation, l_angleB = l_next.Rotation;
+
                 if ((l_angleB - l_angleA) < 0.0f) {
                     l_angleB += MathHelper.TwoPi;
                 }
+
+                l_render.Rotation = MathHelper.Lerp(l_angleA, l_angleB, l_timeRatio);
             } else if (l_now.Spin == SpinDirection.CounterClockwise) {
+                float l_angleA = l_now.Rotation, l_angleB = l_next.Rotation;
+
                 if ((l_angleB - l_angleA) > 0.0f) {
                     l_angleB -= MathHelper.TwoPi;
                 }
+
+                l_render.Rotation = MathHelper.Lerp(l_angleA, l_angleB, l_timeRatio);
             }
 
-            l_render.Rotation = MathHelper.Lerp(l_angleA, l_angleB, l_timeRatio);           
             l_render.Scale = Vector2.Lerp(l_now.Scale, l_next.Scale, l_timeRatio);
             l_render.Location = Vector2.Lerp(l_now.Location, l_next.Location, l_timeRatio);
             l_render.Pivot = Vector2.Lerp(l_now.Pivot, l_next.Pivot, l_timeRatio);

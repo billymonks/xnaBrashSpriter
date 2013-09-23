@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <spriter_data scml_version="1.0" generator="BrashMonkey Spriter" generator_version="b5">
     <folder id="0" name="guides">
-        <file id="0" name="torso/p_torso_idle.png" width="0" height="0" pivot_x="0" pivot_y="1"/>
+        <file id="0" name="torso/p_torso_idle.png" width="88" height="88" pivot_x="0" pivot_y="1"/>
     </folder>
     <folder id="1" name="torso">
         <file id="0" name="torso/p_torso_idle.png" width="88" height="88" pivot_x="0.911111" pivot_y="0.555556"/>
@@ -61,10 +61,10 @@
         <file id="9" name="hands/p_hand_hit_a.png" width="79" height="78" pivot_x="0.37037" pivot_y="0.475"/>
         <file id="10" name="hands/p_hand_push_0.png" width="79" height="77" pivot_x="0.185185" pivot_y="0.506329"/>
         <file id="11" name="hands/p_hand_push_a.png" width="79" height="78" pivot_x="0.345679" pivot_y="0.45"/>
-        <file id="12" name="hands/p_hand_edge_0.png" width="79" height="77" pivot_x="0.185185" pivot_y="0.506329"/>
+        <file id="12" name="hands/p_hand_edge_0.png" width="79" height="77" pivot_x="0" pivot_y="1"/>
         <file id="13" name="hands/p_hand_a_edge.png" width="79" height="78" pivot_x="0.345679" pivot_y="0.45"/>
-        <file id="14" name="hands/p_hand_hang_0.png" width="79" height="77" pivot_x="0.185185" pivot_y="0.506329"/>
-        <file id="15" name="hands/p_hand_hang_1.png" width="79" height="77" pivot_x="0.185185" pivot_y="0.506329"/>
+        <file id="14" name="hands/p_hand_hang_0.png" width="79" height="77" pivot_x="0" pivot_y="1"/>
+        <file id="15" name="hands/p_hand_hang_1.png" width="79" height="77" pivot_x="0" pivot_y="1"/>
         <file id="16" name="hands/p_hand_hang_a.png" width="79" height="78" pivot_x="0.345679" pivot_y="0.45"/>
         <file id="17" name="hands/p_hand_throw_1.png" width="0" height="0" pivot_x="0" pivot_y="1"/>
         <file id="18" name="hands/p_hand_throw_0.png" width="79" height="77" pivot_x="0.185185" pivot_y="0.506329"/>
@@ -75,9 +75,6 @@
         <file id="23" name="hands/hand_0.png" width="0" height="0" pivot_x="0" pivot_y="1"/>
         <file id="24" name="hands/p_hand_swim_0.png" width="0" height="0" pivot_x="0.185185" pivot_y="0.506329"/>
         <file id="25" name="hands/p_hand_float_0.png" width="79" height="77" pivot_x="0.185185" pivot_y="0.506329"/>
-        <file id="26" name="hands/p_hand_hang_1.png" width="0" height="0" pivot_x="0" pivot_y="1"/>
-        <file id="27" name="hands/p_hand_hang_0.png" width="0" height="0" pivot_x="0" pivot_y="1"/>
-        <file id="28" name="hands/p_hand_edge_0.png" width="0" height="0" pivot_x="0" pivot_y="1"/>
     </folder>
     <folder id="5" name="legs">
         <file id="0" name="legs/p_leg_a.png" width="61" height="45" pivot_x="0.253968" pivot_y="0.468085"/>

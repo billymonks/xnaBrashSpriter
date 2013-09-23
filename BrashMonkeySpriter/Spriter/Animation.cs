@@ -14,8 +14,8 @@ using System.Text;
 
 namespace BrashMonkeySpriter.Spriter {
     public class AnimationList : List<Animation> {
-        public Animation this[string name] {
-            get { return this.FirstOrDefault(x => x.Name == name); }
+        public Animation this[string p_name] {
+            get { return this.FirstOrDefault(x => x.Name.ToLower() == p_name.ToLower()); }
         }
     }
 

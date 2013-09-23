@@ -15,8 +15,8 @@ using Microsoft.Xna.Framework;
 
 namespace BrashMonkeySpriter.Spriter {
     public class TimelineList : List<Timeline> {
-        public Timeline this[string name] {
-            get { return this.FirstOrDefault(x => x.Name == name); }
+        public Timeline this[string p_name] {
+            get { return this.FirstOrDefault(x => x.Name.ToLower() == p_name.ToLower()); }
         }
     }
 
