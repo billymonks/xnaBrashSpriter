@@ -187,14 +187,20 @@ namespace BrashMonkeySpriter {
             } else if (l_now.Spin == SpinDirection.Clockwise) {
                 if ((l_angleB - l_angleA) < 0.0f) {
                     l_angleB += MathHelper.TwoPi;
+                } else {
+                    l_angleA %= MathHelper.TwoPi;
+                    l_angleB %= MathHelper.TwoPi;
                 }
             } else if (l_now.Spin == SpinDirection.CounterClockwise) {
                 if ((l_angleB - l_angleA) > 0.0f) {
                     l_angleB -= MathHelper.TwoPi;
+                } else {
+                    l_angleA %= MathHelper.TwoPi;
+                    l_angleB %= MathHelper.TwoPi;
                 }
             }
 
-            l_render.Rotation = MathHelper.Lerp((l_angleA % MathHelper.TwoPi), (l_angleB % MathHelper.TwoPi), l_timeRatio);
+            l_render.Rotation = MathHelper.Lerp(l_angleA, l_angleB, l_timeRatio);
             l_render.Scale = Vector2.Lerp(l_now.Scale, l_next.Scale, l_timeRatio);
             l_render.Location = Vector2.Lerp(l_now.Location, l_next.Location, l_timeRatio);
             l_render.Pivot = Vector2.Lerp(l_now.Pivot, l_next.Pivot, l_timeRatio);
@@ -247,7 +253,7 @@ namespace BrashMonkeySpriter {
             m_renderList.Clear();
             m_boneTransforms.Clear();
             
-            m_elapsedTime += p_gameTime.ElapsedGameTime.Milliseconds / 4;
+            m_elapsedTime += p_gameTime.ElapsedGameTime.Milliseconds;
             if (m_elapsedTime > m_current.Length) {
                 if (AnimationEnded != null)
                     AnimationEnded();

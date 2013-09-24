@@ -61,7 +61,7 @@ namespace BrashMonkeySpriterGameTest {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             m_character = Content.Load<CharacterModel>(@".\graphics\models\player").CreateAnimator("Player");
-            m_character.ChangeAnimation("walk");
+            m_character.ChangeAnimation("idle");
 
             // TODO: use this.Content to load your game content here
         }
