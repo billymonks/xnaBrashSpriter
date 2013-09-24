@@ -181,26 +181,20 @@ namespace BrashMonkeySpriter {
             /// Rotations are handled differently depending on which way they're supposed to spin
             AnimationTransform l_render = new AnimationTransform();
 
+            float l_angleA = l_now.Rotation, l_angleB = l_next.Rotation;
             if (l_now.Spin == SpinDirection.None) {
-                l_render.Rotation = l_now.Rotation;
+                l_angleA = l_angleB = l_now.Rotation;
             } else if (l_now.Spin == SpinDirection.Clockwise) {
-                float l_angleA = l_now.Rotation, l_angleB = l_next.Rotation;
-
                 if ((l_angleB - l_angleA) < 0.0f) {
                     l_angleB += MathHelper.TwoPi;
                 }
-
-                l_render.Rotation = MathHelper.Lerp(l_angleA, l_angleB, l_timeRatio);
             } else if (l_now.Spin == SpinDirection.CounterClockwise) {
-                float l_angleA = l_now.Rotation, l_angleB = l_next.Rotation;
-
                 if ((l_angleB - l_angleA) > 0.0f) {
                     l_angleB -= MathHelper.TwoPi;
                 }
-
-                l_render.Rotation = MathHelper.Lerp(l_angleA, l_angleB, l_timeRatio);
             }
 
+            l_render.Rotation = MathHelper.Lerp((l_angleA % MathHelper.TwoPi), (l_angleB % MathHelper.TwoPi), l_timeRatio);
             l_render.Scale = Vector2.Lerp(l_now.Scale, l_next.Scale, l_timeRatio);
             l_render.Location = Vector2.Lerp(l_now.Location, l_next.Location, l_timeRatio);
             l_render.Pivot = Vector2.Lerp(l_now.Pivot, l_next.Pivot, l_timeRatio);
@@ -233,7 +227,6 @@ namespace BrashMonkeySpriter {
                 return m_boneTransforms[p_reference.BoneId];
             }
 
-            AnimationTransform l_transform = GetFrameTransition(p_reference);
             AnimationTransform l_baseTransform;
             if((p_reference.Parent != -1)){
                 l_baseTransform = ApplyBoneTransforms(p_main, p_main.Bones[p_reference.Parent]);
@@ -241,7 +234,7 @@ namespace BrashMonkeySpriter {
                 //Apply global transforms to objects without parents (location is added later)
                 l_baseTransform = new AnimationTransform(Vector2.Zero, Rotation, Vector2.Zero, new Vector2(Math.Abs(Scale)));
             }
-            l_transform = ApplyTransform(l_transform, l_baseTransform);
+            AnimationTransform l_transform = ApplyTransform(GetFrameTransition(p_reference), l_baseTransform);
 
             if (p_reference.BoneId >= 0) {
                 m_boneTransforms.Add(p_reference.BoneId, l_transform);
@@ -254,7 +247,7 @@ namespace BrashMonkeySpriter {
             m_renderList.Clear();
             m_boneTransforms.Clear();
             
-            m_elapsedTime += p_gameTime.ElapsedGameTime.Milliseconds;
+            m_elapsedTime += p_gameTime.ElapsedGameTime.Milliseconds / 4;
             if (m_elapsedTime > m_current.Length) {
                 if (AnimationEnded != null)
                     AnimationEnded();

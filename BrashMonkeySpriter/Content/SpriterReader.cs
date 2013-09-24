@@ -29,32 +29,6 @@ namespace BrashMonkeySpriter.Content {
     public class SpriterReader : ContentTypeReader<CharacterModel> {
         protected override CharacterModel Read(ContentReader p_input, CharacterModel p_character) {
             p_character = new CharacterModel();
-/*            
-            /// ------------------- Texture Dictionary -------------------------------
-            Int32 l_folderCount = p_input.ReadInt32();///Number of Folders
-            for (int l_fIter = 0; l_fIter < l_folderCount; l_fIter++) {
-                List<String> l_list = new List<String>();
-                
-                Int32 l_fileCount = p_input.ReadInt32();///Number of Files
-                for (int l_fIter2 = 0; l_fIter2 < l_fileCount; l_fIter2++) {
-                    l_list.Add(p_input.ReadString());///Name
-                    p_input.ReadInt32();///Width
-                    p_input.ReadInt32();///Height
-                }
-
-                p_character.FileNames.Add(l_list);
-            }
-            // Load textures
-            for (int l_i = 0; l_i < p_character.FileNames.Count; l_i++) {
-                List<Texture2D> l_list = new List<Texture2D>();
-
-                for (int l_j = 0; l_j < p_character.FileNames[l_i].Count; l_j++) {
-                    l_list.Add(p_input.ContentManager.Load<Texture2D>(p_character.FileNames[l_i][l_j].Substring(0, p_character.FileNames[l_i][l_j].Length - 4)));
-                }
-
-                p_character.Textures.Add(l_list);
-            }
-*/
 
             Int32 l_textureCount = p_input.ReadInt32();///Number of Textures
             for (int l_tIter = 0; l_tIter < l_textureCount; l_tIter++) {

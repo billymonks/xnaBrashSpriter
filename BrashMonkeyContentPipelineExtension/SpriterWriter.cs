@@ -163,8 +163,6 @@ namespace BrashMonkeyContentPipelineExtension {
                     foreach (XElement l_timeLine in l_animation.Descendants("timeline")) {
                         p_output.Write(l_entity.Attribute("name").Value);
 
-                        int l_defaultSpin = 1;
-
                         /// Write Key                       
                         p_output.Write(l_timeLine.Descendants("key").Count());
                         foreach (XElement l_key in l_timeLine.Descendants("key")) {
