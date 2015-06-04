@@ -27,7 +27,7 @@ namespace BrashMonkeySpriterGameTest {
     public class Game1 : Microsoft.Xna.Framework.Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        CharaterAnimator m_character;
+        CharacterAnimator m_character;
 
         public Game1() {
             graphics = new GraphicsDeviceManager(this);
@@ -60,8 +60,8 @@ namespace BrashMonkeySpriterGameTest {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            m_character = Content.Load<CharacterModel>(@".\graphics\models\player").CreateAnimator("Player");
-            m_character.ChangeAnimation("idle");
+            m_character = Content.Load<CharacterModel>(@".\graphics\models\Example").CreateAnimator("monster");
+            m_character.ChangeAnimation("Idle");
 
             // TODO: use this.Content to load your game content here
         }
@@ -86,13 +86,12 @@ namespace BrashMonkeySpriterGameTest {
             }
 
             // TODO: Add your update logic here
-            m_character.Location = new Vector2(320, 380);
-            m_character.Scale = 0.75f;
+            m_character.Scale = 1.0f;
             m_character.Rotation = 0.0f;
             m_character.FlipX = false;
             m_character.FlipY = false;
 
-            m_character.Update(gameTime);
+            m_character.Update(gameTime, new Vector2(320, 460));
 
             base.Update(gameTime);
         }
@@ -103,7 +102,6 @@ namespace BrashMonkeySpriterGameTest {
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
 
             m_character.Draw(spriteBatch);
             // TODO: Add your drawing code here

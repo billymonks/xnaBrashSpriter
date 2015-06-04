@@ -39,7 +39,7 @@ namespace BrashMonkeySpriter.Content {
             Int32 l_rectCount1 = p_input.ReadInt32();///Number of RectangleLists
             for (int l_rIter1 = 0; l_rIter1 < l_rectCount1; l_rIter1++) {
                 List<Rectangle> l_list = new List<Rectangle>();
-                
+
                 Int32 l_rectCount2 = p_input.ReadInt32();///Number of Rectangles in that list
                 for (int l_rIter2 = 0; l_rIter2 < l_rectCount2; l_rIter2++) {
                     l_list.Add(p_input.ReadRawObject<Rectangle>());
@@ -178,6 +178,8 @@ namespace BrashMonkeySpriter.Content {
 
                 p_character.Add(l_entity);
             }
+
+            p_character.CharacterMaps = p_input.ReadObject<List<CharacterMap>>();
 
             return p_character;
         }

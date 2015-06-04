@@ -96,6 +96,7 @@
     <Compile Include="Spriter\Animation.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Content\SpriterReader.cs" />
+    <Compile Include="Spriter\CharacterMap.cs" />
     <Compile Include="Spriter\Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spriter\Reference.cs" />

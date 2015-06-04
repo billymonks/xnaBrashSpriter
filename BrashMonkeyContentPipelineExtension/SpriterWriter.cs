@@ -21,7 +21,7 @@ using System.Globalization;
 namespace BrashMonkeyContentPipelineExtension {
     [ContentTypeWriter]
     public class SpriterWriter : ContentTypeWriter<SpriterShadowData> {
-        private bool GetAttributeInt32(XElement p_element, String p_name, out Int32 p_out, Int32 p_default = 0) {
+        private bool GetAttributeInt32(XElement p_element, String p_name, out Int32 p_out, Int32 p_default = -1) {
             if (p_element.Attribute(p_name) != null) {
                 return Int32.TryParse(p_element.Attribute(p_name).Value, out p_out);
             }
@@ -54,22 +54,6 @@ namespace BrashMonkeyContentPipelineExtension {
             float l_tmpFloat = 0.0f;
             bool l_tmpBool = false;
 
-            /// Write the texture dictionary.
-            /*            p_output.Write(p_value.XML.Root.Descendants("folder").Count());
-                        foreach (XElement l_folder in p_value.XML.Root.Descendants("folder")) {
-                            p_output.Write(l_folder.Descendants("file").Count());
-                            foreach (XElement l_file in l_folder.Descendants("file")) {
-                                p_output.Write(l_file.Attribute("name").Value);
-
-                                GetAttributeInt32(l_file, "width", out l_tmpInt);
-                                p_output.Write(l_tmpInt);
-
-                                GetAttributeInt32(l_file, "height", out l_tmpInt);
-                                p_output.Write(l_tmpInt);
-                            }
-                        }*/
-
-            /// Write the generated Texture content.
             p_output.Write(p_value.Textures.Count());
             foreach (Texture2DContent l_texture in p_value.Textures) {
                 p_output.WriteRawObject<Texture2DContent>(l_texture);
@@ -99,6 +83,39 @@ namespace BrashMonkeyContentPipelineExtension {
 
                     l_defaultPivot.GetOrCreate(l_folderId).Add(l_fileId, new Vector2(l_tmpX, l_tmpY));
                 }
+            }
+
+            List<BrashMonkeySpriter.Spriter.CharacterMap> l_charsMapsList = new List<BrashMonkeySpriter.Spriter.CharacterMap>();
+            foreach (XElement l_characterMaps in p_value.XML.Root.Descendants("character_map")) {
+                BrashMonkeySpriter.Spriter.CharacterMap mps = new BrashMonkeySpriter.Spriter.CharacterMap();
+                int l_id;
+                string l_idStr = l_characterMaps.Attribute("name").Value;
+                GetAttributeInt32(l_characterMaps, "id", out l_id);
+
+                mps.Id = l_id;
+                mps.Name = l_idStr;
+
+                List<BrashMonkeySpriter.Spriter.MapInstruction> l_mapsInstructionList = new List<BrashMonkeySpriter.Spriter.MapInstruction>();
+                foreach (XElement l_mapsFileTarget in l_characterMaps.Descendants("map")) {
+                    int l_tmpFile, l_tmpFolder, l_tmpTargetFile, l_tmpTargetFolder;
+                    BrashMonkeySpriter.Spriter.MapInstruction l_mpi = new BrashMonkeySpriter.Spriter.MapInstruction();
+
+                    GetAttributeInt32(l_mapsFileTarget, "file", out l_tmpFile);
+                    GetAttributeInt32(l_mapsFileTarget, "folder", out l_tmpFolder);
+                    GetAttributeInt32(l_mapsFileTarget, "target_file", out l_tmpTargetFile);
+                    GetAttributeInt32(l_mapsFileTarget, "target_folder", out l_tmpTargetFolder);
+
+                    l_mpi.File = l_tmpFile;
+                    l_mpi.Folder = l_tmpFolder;
+                    l_mpi.TargetFile = l_tmpTargetFile;
+                    l_mpi.TargetFolder = l_tmpTargetFolder;
+
+                    l_mapsInstructionList.Add(l_mpi);
+                }
+
+                mps.Maps = l_mapsInstructionList.OrderBy(m => m.Folder).ToArray();
+
+                l_charsMapsList.Add(mps);
             }
 
             /// Write Entities.
@@ -242,6 +259,9 @@ namespace BrashMonkeyContentPipelineExtension {
                     }
                 }
             }
+
+            p_output.WriteObject(l_charsMapsList);
+
         }
 
         public override string GetRuntimeType(TargetPlatform p_targetPlatform) {

@@ -57,7 +57,6 @@
       <Name>player</Name>
       <Importer>SpriterImporter</Importer>
       <Processor>SpriterProcessor</Processor>
-      <SubType>Designer</SubType>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

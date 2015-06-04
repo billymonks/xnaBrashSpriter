@@ -107,6 +107,15 @@
         <file id="11" name="feet/p_foot_spin_2.png" width="0" height="0" pivot_x="0.456522" pivot_y="0.425"/>
     </folder>
     <entity id="0" name="Player">
+        <character_map id="0" name="orm">
+            <map folder="2" file="0" target_folder="2" target_file="4"/>
+        </character_map>
+        <character_map id="1" name="abap">
+            <map folder="2" file="0" target_folder="6" target_file="3"/>
+        </character_map>
+        <character_map id="2" name="hidden">
+            <map folder="2" file="0"/>
+        </character_map>
         <animation id="0" name="idle" length="4000">
             <mainline>
                 <key id="0">
